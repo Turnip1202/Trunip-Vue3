@@ -6,9 +6,15 @@ export const loginConfig:LoginConfigType = {
         label:"账号密码登录",
         placeholder:"请输入账号密码",
         // 忘记密码
-        forgetPassword:"忘记密码",
+        forgetPassword:{
+            show:true,
+            text:"忘记密码"
+        },
         // 记住密码
-        rememberPassword:"记住密码",
+        rememberPassword:{
+            show:true,
+            text:"记住密码"
+        },
         // 立即注册
         register:"立即注册"
     },
@@ -22,3 +28,4 @@ export const loginConfig:LoginConfigType = {
     btnText:"立即登录"
 
 }
+

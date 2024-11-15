@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import LoginPanel from "./cpns/login-panel.vue";
+import Login from "./cpns/login.vue";
 import { loginConfig } from "./config";
 
 </script>
 <template>
     <div class="login">
-        <LoginPanel :config="loginConfig"></LoginPanel>
+        <Login :config="loginConfig"></Login>
     </div>
 </template>
 
