@@ -2,23 +2,19 @@ import type { LoginConfigType } from "../types";
 export const loginConfig:LoginConfigType = {
     title: "后台管理系统",
     accLogin:{
+        name:"account",
         title:"账号密码登录",
         label:"账号密码登录",
         placeholder:"请输入账号密码",
         // 忘记密码
-        forgetPassword:{
-            show:true,
-            text:"忘记密码"
-        },
+        forgetPassword:"忘记密码",
         // 记住密码
-        rememberPassword:{
-            show:true,
-            text:"记住密码"
-        },
+        rememberPassword:"记住密码",
         // 立即注册
         register:"立即注册"
     },
     phoneLogin:{
+        name:"phone",
         title:"手机号登录",
         label:"手机号登录",
         placeholder:"请输入手机号",

@@ -6,14 +6,16 @@ interface ShowTextType {
 interface LoginConfigType {
     title: string;
     accLogin: {
+        name:string;
         title: string;
         label: string;
         placeholder: string;
-        forgetPassword: ShowTextType;
-        rememberPassword: ShowTextType;
+        forgetPassword: string;
+        rememberPassword: string;
         register: string;
     };
     phoneLogin: {
+        name:string;
         title: string;
         label: string;
         placeholder: string;
