@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import { Fold, Expand } from '@element-plus/icons-vue';
-import { useFold , type FoldMode} from '@/hooks/useFold';
+import { useFold  } from '@/hooks/useFold';
 import { computed } from 'vue';
-import type { FoldProps } from './types';
-import { FOLD_MODE } from './constant';
+import type { FoldProps,FoldMode,FoldModelValue } from './types';
 // 注意：这里不设置modelValue的默认值
-const props = withDefaults(defineProps<FoldProps<FoldMode>>(), {
-  mode: FOLD_MODE.PINIA
-  // 移除 modelValue 的默认值
-})
+const props = withDefaults(defineProps<FoldProps<FoldModelValue>>(), {
+  modelValue: undefined
+});
 console.log(props)
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean];
 }>();
 
-const foldManager = useFold(props.mode, props, emit);
+const foldManager = useFold<FoldMode,FoldModelValue>(props.mode, props.modelValue, emit);
 
 const isFold = computed(() => foldManager.isFold);
 </script>

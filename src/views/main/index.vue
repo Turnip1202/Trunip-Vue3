@@ -15,6 +15,7 @@ const isFold = ref(false)
       <el-container class="main-layout-content">
         <el-header>
           <NavHeader 
+            :model-value="isFold"
             :mode="FOLD_MODE.PROPS"
           />
           <!-- 使用Pinia方式 -->
