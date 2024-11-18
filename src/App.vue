@@ -6,7 +6,7 @@ import ThemeSwitch from "@/base-ui/theme-switch";
 
 <template>
   <div class="app">
-    <el-config-provider :locale="zhCn">
+    <el-config-provider :locale="zhCn" >
       <ThemeSwitch />
       <router-view></router-view>
     </el-config-provider>
@@ -14,6 +14,8 @@ import ThemeSwitch from "@/base-ui/theme-switch";
 </template>
 
 <style lang="scss">
-
+.app{
+  height: 100%;
+}
 </style>
 
