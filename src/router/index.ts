@@ -31,8 +31,8 @@ const router = createRouter({
 });
 router.beforeEach((to, from) => {
     console.log(to, from);
-    if(to.path!=="/main"){
-        return "/main"
+    if(to.path!=="/login"){
+        return "/login"
     }
 });
 export default router;

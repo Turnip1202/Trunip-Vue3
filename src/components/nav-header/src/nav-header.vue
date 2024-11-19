@@ -1,29 +1,73 @@
 <script setup lang="ts">
-import { Fold, Expand } from '@element-plus/icons-vue';
-import { useFold  } from '@/hooks/useFold';
-import { computed } from 'vue';
-import type { FoldProps,FoldMode,FoldModelValue } from './types';
-// 注意：这里不设置modelValue的默认值
-const props = withDefaults(defineProps<FoldProps<FoldModelValue>>(), {
+import { ref, computed } from 'vue'
+import { Fold, Expand, ArrowDown } from '@element-plus/icons-vue'
+import { useFold } from '@/hooks/useFold'
+import type { FoldProps, FoldModelValue, FoldMode } from './types'
+import { FOLD_MODE } from './constant'
+import { LanguageConfig, type LanguageItem, type LanguageCode } from './config/language.config'
+
+//--------折叠菜单-------
+const props = withDefaults(defineProps<FoldProps>(), {
+  mode: FOLD_MODE.PINIA,
   modelValue: undefined
-});
-console.log(props)
+})
 
 const emit = defineEmits<{
-  'update:modelValue': [value: boolean];
-}>();
+  'update:modelValue': [value: boolean]
+}>()
 
-const foldManager = useFold<FoldMode,FoldModelValue>(props.mode, props.modelValue, emit);
+const foldManager = useFold<FoldMode,FoldModelValue>(props.mode, props.modelValue, emit)
 
-const isFold = computed(() => foldManager.isFold);
+//-----------------------切换语言------------
+// 当前语言
+const currentLang = ref<LanguageCode>(LanguageConfig.defaultLang)
+
+// 处理语言切换
+const handleCommand = (langCode: LanguageCode) => {
+  currentLang.value = langCode
+  const selectedLang = LanguageConfig.languages.get(langCode)
+  console.log(`切换语言到: ${selectedLang?.name}`)
+}
+
+// 获取所有语言列表
+const languageList = Array.from(LanguageConfig.languages.values())
+
+// 获取当前语言项
+const getCurrentLanguage = computed((): LanguageItem | undefined => {
+  return LanguageConfig.languages.get(currentLang.value)
+})
 </script>
+
 <template>
   <div class="nav-header">
-    <el-icon @click="foldManager.toggleFold">
-        <Fold v-if="isFold" />
+    <div class="left">
+      <el-icon @click="foldManager.toggleFold">
+        <Fold v-if="foldManager.isFold" />
         <Expand v-else />
-    </el-icon>
-    header
+      </el-icon>
+    </div>
+    
+    <div class="right">
+      <el-dropdown @command="handleCommand">
+        <span class="lang-dropdown">
+          {{ getCurrentLanguage?.name }}
+          <el-icon class="el-icon--right">
+            <ArrowDown />
+          </el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item 
+              v-for="lang in languageList" 
+              :key="lang.code"
+              :command="lang.code"
+            >
+              {{ lang.name }} ({{ lang.chineseName }})
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
   </div>
 </template>
 
@@ -32,9 +76,32 @@ const isFold = computed(() => foldManager.isFold);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  .el-icon {
-    font-size: 24px;
-    cursor: pointer;
+  height: 100%;
+  padding: 0 16px;
+  
+  .left {
+    .el-icon {
+      font-size: 24px;
+      cursor: pointer;
+    }
+  }
+  
+  .right {
+    .lang-dropdown {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      outline: none;
+      
+      .el-icon {
+        margin-left: 4px;
+        font-size: 12px;
+      }
+    }
+
+    :deep(.el-dropdown__popper) {
+      outline: none;
+    }
   }
 }
 </style>

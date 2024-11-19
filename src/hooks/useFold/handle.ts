@@ -1,17 +1,21 @@
-import {  computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useLayoutStore } from '@/store/layout'
 import type { IFoldManager } from './types'
 import { FOLD_MODE } from './constant'
 
-// 创建Props模式的管理器
 function createPropsFoldManager(
-  modelValue:boolean,
+  modelValue: boolean,
   emit: (event: 'update:modelValue', value: boolean) => void
 ): IFoldManager {
-  // 使用computed来保持响应性
+  // 使用本地ref来跟踪状态
+  const localFold = ref(modelValue)
+  
   const isFoldRef = computed({
-    get: () => modelValue,
-    set: (value) => emit('update:modelValue', value)
+    get: () => localFold.value,
+    set: (value) => {
+      localFold.value = value
+      emit('update:modelValue', value)
+    }
   })
   
   return {
@@ -27,7 +31,6 @@ function createPropsFoldManager(
   }
 }
 
-// 创建Pinia模式的管理器
 function createPiniaFoldManager(): IFoldManager {
   const store = useLayoutStore()
   
@@ -40,20 +43,20 @@ function createPiniaFoldManager(): IFoldManager {
   }
 }
 
-export function useFold<T,E extends boolean|undefined>(
-  mode:T,
-  modelValue?: E,
+export function useFold<T,E extends boolean | undefined>(
+  mode: T,
+  modelValue: E,
   emit?: (event: 'update:modelValue', value: boolean) => void
 ): IFoldManager {
-
-    
-     // 检查是否为props模式且具备必要条件
-  if (mode === FOLD_MODE.PROPS && modelValue !== undefined && emit) {
-    console.log("进入props模式")
-    return createPropsFoldManager(modelValue, emit)
+  // Props 模式的必要条件：mode 为 PROPS、有 emit 函数
+  const isValidPropsMode = mode === FOLD_MODE.PROPS && emit !== undefined&&modelValue!==undefined;
+  
+  if (isValidPropsMode) {
+    console.warn('props mode start...')
+    return createPropsFoldManager(modelValue, emit);
   }
-    
-  // 默认或降级使用Pinia模式
-  console.warn('Props mode requires v-model binding, falling back to Pinia mode')
-  return createPiniaFoldManager()
+
+  console.warn('pinia mode start...')
+  // 不满足 Props 模式条件时，降级使用 Pinia 模式
+  return createPiniaFoldManager();
 } 

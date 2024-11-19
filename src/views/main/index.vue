@@ -2,24 +2,42 @@
 import NavMenu from '@/components/nav-menu';
 import NavHeader, { FOLD_MODE } from '@/components/nav-header';
 import PageContent from '@/components/page-content';
-import { ref } from 'vue'
-// 仅在使用props模式时需要
-const isFold = ref(false)
+import { computed, ref, watch } from 'vue'
+import { useLayoutStore } from '@/store/layout'
+import { storeToRefs } from 'pinia'
+//---------------------pinia 的模式--------------------------------
+const layoutStore = useLayoutStore()
+// 使用 storeToRefs 保持响应性
+const { isFold } = storeToRefs(layoutStore)
+
+//决定是否折叠menu
+const isFoldRef = computed({
+  get(){
+    return isFold.value
+  },
+  set(value){
+    isFold.value = value
+  }
+})
+
+//---------------------props 的模式--------------------------------
+const changeFold = ref(isFold.value); 
+watch(changeFold, (newVal) => {
+  console.log('changeFold',newVal)
+  isFoldRef.value = newVal
+})
+
 </script>
+
 <template>
   <div class="main-layout">
     <el-container class="main-layout-container">
-      <el-aside width="210px">
-        <NavMenu />
+      <el-aside style="">
+        <NavMenu :collapse="isFoldRef"/>
       </el-aside>
       <el-container class="main-layout-content">
         <el-header>
-          <NavHeader 
-            :model-value="isFold"
-            :mode="FOLD_MODE.PROPS"
-          />
-          <!-- 使用Pinia方式 -->
-          <!-- <NavHeader mode="pinia" /> -->
+          <NavHeader :mode="FOLD_MODE.PROPS"/>
         </el-header>
         <el-main>
           <PageContent />
@@ -51,7 +69,9 @@ const isFold = ref(false)
   }
   
   .el-aside {
+    width: auto;//宽度由内容自适应
     background-color: $left-menu-bg-color;
+    overflow: hidden;
   }
   
   .el-header {
