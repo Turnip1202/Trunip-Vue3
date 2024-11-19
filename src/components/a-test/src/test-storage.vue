@@ -27,6 +27,13 @@ const strategies: Array<{
       prefix: 'test_vueuse_',
       expire: 7 * 24 * 3600
     }
+  },
+  {
+    type: 'indexedDB',
+    options: {
+      dbName: 'test-db',
+      storeName: 'test-store'
+    }
   }
 ]
 
@@ -78,11 +85,11 @@ const runStorageTests = async (strategy: StorageType, options: Parameters<typeof
     addResult(strategy, `⏱️ 过期测试(2.5秒后): ${expired === null ? '✅ 已过期' : '❌ 未过期'}`)
 
     // 测试存储大小
-    const { used, total } = storage.getSize()
+    const { used, total } = await storage.getSize()
     addResult(strategy, `📊 存储使用: ${used}KB / ${total}KB`)
 
     // 显示所有存储的键
-    const keys = storage.keys()
+    const keys = await storage.keys()
     addResult(strategy, `🔑 存储的键: ${keys.join(', ')}`)
 
   } catch (error) {

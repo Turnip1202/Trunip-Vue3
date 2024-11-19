@@ -7,5 +7,6 @@ export const storage = new LocalStorage()
 export { LocalStorage } from './src/localStorage'
 export type { StorageOptions, StorageItem } from './src/types' 
 export { createStorage, type StorageType } from './src/storage-factory'
+export { IndexedDB } from './src/indexedDB'
 
 

@@ -1,39 +1,44 @@
-import { LocalStorage } from '../localStorage'
+import { IndexedDB } from '../indexedDB'
 import type { StorageAdapter } from './storage-adapter'
 import type { StorageOptions } from '../types'
 
-export class LocalStorageAdapter implements StorageAdapter {
-  private storage: LocalStorage
+export class IndexedDBAdapter implements StorageAdapter {
+  private db: IndexedDB
 
   constructor(options: StorageOptions = {}) {
-    this.storage = new LocalStorage(options)
+    this.db = new IndexedDB({
+      dbName: options.dbName ?? 'app_db',
+      storeName: options.storeName ?? 'app_store',
+      version: options.version ?? 1,
+      expire: options.expire
+    })
   }
 
   async set<T>(key: string, value: T, expire?: number): Promise<boolean> {
-    return this.storage.set(key, value, expire)
+    return this.db.set(key, value, expire)
   }
 
   async get<T>(key: string): Promise<T | null> {
-    return this.storage.get<T>(key)
+    return this.db.get<T>(key)
   }
 
   async remove(key: string): Promise<boolean> {
-    return this.storage.remove(key)
+    return this.db.remove(key)
   }
 
   async clear(): Promise<boolean> {
-    return this.storage.clear()
+    return this.db.clear()
   }
 
   async keys(): Promise<string[]> {
-    return this.storage.keys()
+    return this.db.keys()
   }
 
   async has(key: string): Promise<boolean> {
-    return this.storage.has(key)
+    return this.db.has(key)
   }
 
   async getSize(): Promise<{ used: number; total: number }> {
-    return this.storage.getSize()
+    return this.db.getSize()
   }
 } 

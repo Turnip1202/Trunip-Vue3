@@ -94,7 +94,7 @@ export class VueUseStorageAdapter implements StorageAdapter {
 
   async clear(): Promise<boolean> {
     try {
-      const keys = this.keys()
+      const keys = await this.keys()
       for (const key of keys) {
         await this.remove(key)
       }
@@ -105,7 +105,7 @@ export class VueUseStorageAdapter implements StorageAdapter {
     }
   }
 
-  keys(): string[] {
+  async keys(): Promise<string[]> {
     return Object.keys(localStorage)
       .filter(key => key.startsWith(this.prefix))
       .map(key => key.slice(this.prefix.length))
@@ -116,7 +116,7 @@ export class VueUseStorageAdapter implements StorageAdapter {
     return value !== null
   }
 
-  getSize(): { used: number; total: number } {
+  async getSize(): Promise<{ used: number; total: number }> {
     try {
       const used = Object.entries(localStorage)
         .filter(([key]) => key.startsWith(this.prefix))
