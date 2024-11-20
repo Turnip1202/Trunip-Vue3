@@ -3,6 +3,9 @@ interface ShowTextType {
     show: boolean
     text: string
 }
+
+
+
 interface LoginConfigType {
     title: string;
     accLogin: {

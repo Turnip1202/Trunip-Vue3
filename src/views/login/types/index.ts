@@ -1,3 +1,4 @@
 export * from "./config.type";
-export * from "./acc.config.types";
-export * from "./phone.config.type";
+
+export * from "./login.config.type";
+export * from "./login.adapter.type";

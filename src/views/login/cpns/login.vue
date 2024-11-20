@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { LoginConfigType } from "../types"
 import { ref, computed } from "vue"
+// biome-ignore lint/style/useImportType: <explanation>
 import LoginPanel from "./login-panel.vue"
 import { accountConfig, accRules, phoneRules, phoneConfig } from "../config"
+import type { ElNotification } from "element-plus"
 
 type LoginType = 'accLogin' | 'phoneLogin'
 
@@ -10,27 +12,44 @@ const props = defineProps<{
   config: LoginConfigType
 }>()
 
-// 使用计算属性简化配置访问
 const loginConfig = computed(() => ({
   ...props.config,
   isAccountLogin: (name: string) => name === props.config.accLogin.name
 }))
 
 const activeName = ref(loginConfig.value.accLogin.name)
+// 修改ref的声明方式
+const loginPanelRefs = ref<Record<LoginType, InstanceType<typeof LoginPanel> | null>>({
+  accLogin: null,
+  phoneLogin: null
+})
+const isRemember = ref(false)
 
-// 简化 tab 切换逻辑
 const changeTab = (tab: { paneName: string }) => {
   activeName.value = tab.paneName
 }
 
-const loginPanelRef = ref()
-const formData = ref({})
-
-const isRemember = ref(false)
 const handleSubmit = async () => {
-  const { valid, data } = await loginPanelRef.value?.validate() || {}
+  ElNotification.info({
+    title: '提示',
+    message: '请输入账号密码',
+    type:"success"
+  })
+  
+  // 获取当前激活的面板类型
+  const currentType = loginConfig.value.isAccountLogin(activeName.value) ? 'accLogin' : 'phoneLogin'
+  const currentPanel = loginPanelRefs.value[currentType]
+  
+  if (!currentPanel) {
+    console.warn('未找到当前面板实例')
+    return
+  }
+
+  // 验证表单
+  const { valid, data } = await currentPanel.validate()
   if (!valid) return
   
+  // 构建登录数据
   const loginData = {
     type: activeName.value,
     remember: isRemember.value,
@@ -39,22 +58,14 @@ const handleSubmit = async () => {
   
   console.log('登录数据:', loginData)
 }
-
-// 使用计算属性判断当前是否为账号登录
 const isAccountLogin = computed(() => 
   loginConfig.value.isAccountLogin(activeName.value)
 )
 
-// 登录类型配置
 const loginTypes: LoginType[] = ['accLogin', 'phoneLogin']
 
-// 获取配置和规则的辅助函数
 const getConfig = (type: LoginType) => type === 'accLogin' ? accountConfig : phoneConfig
 const getRules = (type: LoginType) => type === 'accLogin' ? accRules : phoneRules
-
-
-
-
 </script>
 
 <template>
@@ -77,6 +88,8 @@ const getRules = (type: LoginType) => type === 'accLogin' ? accRules : phoneRule
             <span>{{ loginConfig[type].title }}</span>
           </template>
           <LoginPanel
+            :key="loginConfig[type].name"
+            :ref="(el)=>loginPanelRefs[type]=el as InstanceType<typeof LoginPanel>"  
             v-if="activeName === loginConfig[type].name"
             :config="getConfig(type)"
             :rules="getRules(type)"
