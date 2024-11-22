@@ -1,50 +1,42 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { ElementLoginFormAdapter } from '../adapters/login-form.adapter'
-import type { 
-  AccountConfigType, AccFormRulesType,
-  PhoneConfigType, PhoneFormRulesType 
-} from '../types'
+import { ref } from "vue";
+import type {LoginFormData} from "../types"
+
+import type {
+	AccFormRulesType,
+	AccountConfigType,
+	PhoneConfigType,
+	PhoneFormRulesType,
+} from "../types";
+import type {FormInstance} from "element-plus";
 defineOptions({
-  name: 'LoginPanel'
-})
+	name: "LoginPanel",
+});
+const formRef = ref<FormInstance>()
 
-
-const props = defineProps<{
-  config: AccountConfigType | PhoneConfigType,
-  rules: AccFormRulesType | PhoneFormRulesType
-}>()
-
-// 创建表单适配器实例
-const formAdapter = new ElementLoginFormAdapter()
-
-// 监听配置变化
-watch(
-  () => ({ config: props.config, rules: props.rules }),
-  ({ config, rules }) => {
-    formAdapter.updateConfig(config, rules)
-  },
-  { immediate: true }
-)
+const props =defineProps<{
+	config: AccountConfigType | PhoneConfigType;
+	rules: AccFormRulesType | PhoneFormRulesType;
+}>();
 
 // 表单数据
-const loginData = ref(formAdapter.getData())
-
-// 监听数据变化
-watch(loginData, (newVal) => {
-  formAdapter.setData(newVal)
-}, { deep: true })
-
+const loginData = ref<LoginFormData>(props.config.reduce((acc, item) => {
+  acc[item.prop] = "";
+  return acc;
+}, {} as LoginFormData));
+const  validate =  () => {
+console.log("被校验了")
+};
 // 暴露适配器方法
-defineExpose({ 
-  validate: () => formAdapter.validate(),
-  getFormData: () => formAdapter.getData()
-})
+defineExpose({
+	validate: () => formRef.value?.validate(),
+	getFormData: () => loginData.value,
+});
 </script>
 
 <template>
   <div class="login-panel">
-    <el-form :model="loginData" size="large" :rules="rules">
+    <el-form  ref="formRef" @validate="validate" :model="loginData" size="large" :rules="rules">
       <template v-for="item in config" :key="item.id">
         <el-form-item :label="item.label" :prop="item.prop">
           <el-input v-model="loginData[item.prop]"/>

@@ -1,32 +1,31 @@
 <script setup lang="ts">
-import NavMenu from '@/components/nav-menu';
-import NavHeader, { FOLD_MODE } from '@/components/nav-header';
-import PageContent from '@/components/page-content';
-import { computed, ref, watch } from 'vue'
-import { useLayoutStore } from '@/store/layout'
-import { storeToRefs } from 'pinia'
+import NavHeader, { FOLD_MODE } from "@/components/nav-header";
+import NavMenu from "@/components/nav-menu";
+import PageContent from "@/components/page-content";
+import { useLayoutStore } from "@/store/layout";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
 //---------------------pinia 的模式--------------------------------
-const layoutStore = useLayoutStore()
+const layoutStore = useLayoutStore();
 // 使用 storeToRefs 保持响应性
-const { isFold } = storeToRefs(layoutStore)
+const { isFold } = storeToRefs(layoutStore);
 
 //决定是否折叠menu
 const isFoldRef = computed({
-  get(){
-    return isFold.value
-  },
-  set(value){
-    isFold.value = value
-  }
-})
+	get() {
+		return isFold.value;
+	},
+	set(value) {
+		isFold.value = value;
+	},
+});
 
 //---------------------props 的模式--------------------------------
-const changeFold = ref(isFold.value); 
+const changeFold = ref(isFold.value);
 watch(changeFold, (newVal) => {
-  console.log('changeFold',newVal)
-  isFoldRef.value = newVal
-})
-
+	console.log("changeFold", newVal);
+	isFoldRef.value = newVal;
+});
 </script>
 
 <template>

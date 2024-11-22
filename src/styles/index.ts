@@ -1,2 +1,1 @@
-export * from './global.scss';
-
+export * from "./global.scss";

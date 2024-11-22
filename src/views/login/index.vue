@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import Login from "./cpns/login.vue";
 import { loginConfig } from "./config";
-
+import Login from "./cpns/login.vue";
 </script>
 <template>
     <div class="login">

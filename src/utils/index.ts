@@ -1,1 +1,1 @@
-export * from "./cache-localStorage"
+export * from "./cache-localStorage";

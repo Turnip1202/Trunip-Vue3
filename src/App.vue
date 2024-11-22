@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { zhCn } from "element-plus/es/locales.mjs";
 import ThemeSwitch from "@/base-ui/theme-switch";
-
+import { zhCn } from "element-plus/es/locales.mjs";
 </script>
 
 <template>

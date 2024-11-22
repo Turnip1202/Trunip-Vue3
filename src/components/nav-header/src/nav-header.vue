@@ -1,41 +1,41 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { Fold, Expand, ArrowDown } from '@element-plus/icons-vue'
-import { useFold } from '@/hooks/useFold'
-import type { FoldProps, FoldModelValue, FoldMode } from './types'
-import { FOLD_MODE } from './constant'
-import { LanguageConfig, type LanguageItem, type LanguageCode } from './config/language.config'
+import { useFold } from "@/hooks/useFold";
+import { ArrowDown, Expand, Fold } from "@element-plus/icons-vue";
+import { computed, ref } from "vue";
+import { type LanguageCode, LanguageConfig, type LanguageItem } from "./config/language.config";
+import { FOLD_MODE } from "./constant";
+import type { FoldMode, FoldModelValue, FoldProps } from "./types";
 
 //--------折叠菜单-------
 const props = withDefaults(defineProps<FoldProps>(), {
-  mode: FOLD_MODE.PINIA,
-  modelValue: undefined
-})
+	mode: FOLD_MODE.PINIA,
+	modelValue: undefined,
+});
 
 const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
-}>()
+	"update:modelValue": [value: boolean];
+}>();
 
-const foldManager = useFold<FoldMode,FoldModelValue>(props.mode, props.modelValue, emit)
+const foldManager = useFold<FoldMode, FoldModelValue>(props.mode, props.modelValue, emit);
 
 //-----------------------切换语言------------
 // 当前语言
-const currentLang = ref<LanguageCode>(LanguageConfig.defaultLang)
+const currentLang = ref<LanguageCode>(LanguageConfig.defaultLang);
 
 // 处理语言切换
 const handleCommand = (langCode: LanguageCode) => {
-  currentLang.value = langCode
-  const selectedLang = LanguageConfig.languages.get(langCode)
-  console.log(`切换语言到: ${selectedLang?.name}`)
-}
+	currentLang.value = langCode;
+	const selectedLang = LanguageConfig.languages.get(langCode);
+	console.log(`切换语言到: ${selectedLang?.name}`);
+};
 
 // 获取所有语言列表
-const languageList = Array.from(LanguageConfig.languages.values())
+const languageList = Array.from(LanguageConfig.languages.values());
 
 // 获取当前语言项
 const getCurrentLanguage = computed((): LanguageItem | undefined => {
-  return LanguageConfig.languages.get(currentLang.value)
-})
+	return LanguageConfig.languages.get(currentLang.value);
+});
 </script>
 
 <template>

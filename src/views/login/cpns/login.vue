@@ -1,71 +1,72 @@
 <script setup lang="ts">
-import type { LoginConfigType } from "../types"
-import { ref, computed } from "vue"
+import { computed, ref } from "vue";
+import { accRules, accountConfig, phoneConfig, phoneRules } from "../config";
+import type { LoginConfigType } from "../types";
 // biome-ignore lint/style/useImportType: <explanation>
-import LoginPanel from "./login-panel.vue"
-import { accountConfig, accRules, phoneRules, phoneConfig } from "../config"
-import type { ElNotification } from "element-plus"
+import LoginPanel from "./login-panel.vue";
+import {login} from "@/api/login";
 
-type LoginType = 'accLogin' | 'phoneLogin'
+type LoginType = "accLogin" | "phoneLogin";
 
 const props = defineProps<{
-  config: LoginConfigType
-}>()
+	config: LoginConfigType;
+}>();
 
 const loginConfig = computed(() => ({
-  ...props.config,
-  isAccountLogin: (name: string) => name === props.config.accLogin.name
-}))
+	...props.config,
+	isAccountLogin: (name: string) => name === props.config.accLogin.name,
+}));
 
-const activeName = ref(loginConfig.value.accLogin.name)
+const activeName = ref(loginConfig.value.accLogin.name);
 // 修改ref的声明方式
 const loginPanelRefs = ref<Record<LoginType, InstanceType<typeof LoginPanel> | null>>({
-  accLogin: null,
-  phoneLogin: null
-})
-const isRemember = ref(false)
+	accLogin: null,
+	phoneLogin: null,
+});
+const isRemember = ref(false);
 
 const changeTab = (tab: { paneName: string }) => {
-  activeName.value = tab.paneName
-}
+	activeName.value = tab.paneName;
+};
 
 const handleSubmit = async () => {
-  ElNotification.info({
-    title: '提示',
-    message: '请输入账号密码',
-    type:"success"
-  })
-  
-  // 获取当前激活的面板类型
-  const currentType = loginConfig.value.isAccountLogin(activeName.value) ? 'accLogin' : 'phoneLogin'
-  const currentPanel = loginPanelRefs.value[currentType]
-  
-  if (!currentPanel) {
-    console.warn('未找到当前面板实例')
-    return
-  }
 
-  // 验证表单
-  const { valid, data } = await currentPanel.validate()
-  if (!valid) return
-  
-  // 构建登录数据
-  const loginData = {
-    type: activeName.value,
-    remember: isRemember.value,
-    ...data
-  }
-  
-  console.log('登录数据:', loginData)
-}
-const isAccountLogin = computed(() => 
-  loginConfig.value.isAccountLogin(activeName.value)
-)
 
-const loginTypes: LoginType[] = ['accLogin', 'phoneLogin']
+	// 获取当前激活的面板类型
+	const currentType = loginConfig.value.isAccountLogin(activeName.value)
+		? "accLogin"
+		: "phoneLogin";
+	const currentPanel = loginPanelRefs.value[currentType];
 
-const getConfig = (type: LoginType) => type === 'accLogin' ? accountConfig : phoneConfig
-const getRules = (type: LoginType) => type === 'accLogin' ? accRules : phoneRules
+	if (!currentPanel) {
+		console.warn("未找到当前面板实例");
+		return;
+	}
+
+	// 验证表单
+	const { getFormData, validate } = await currentPanel;
+  const data = await getFormData();
+	// 验证表单
+	const valid = await validate();
+  console.log("valid", valid);
+  console.log("data", data);
+	if (!valid) return;
+
+	// 构建登录数据
+	const loginData = {
+		type: activeName.value,
+		remember: isRemember.value,
+		...data,
+	};
+  login({...loginData})
+	console.log("登录数据:", loginData);
+};
+const isAccountLogin = computed(() => loginConfig.value.isAccountLogin(activeName.value));
+
+const loginTypes: LoginType[] = ["accLogin", "phoneLogin"];
+
+const getConfig = (type: LoginType) => (type === "accLogin" ? accountConfig : phoneConfig);
+const getRules = (type: LoginType) => (type === "accLogin" ? accRules : phoneRules);
 </script>
 
 <template>
@@ -73,10 +74,10 @@ const getRules = (type: LoginType) => type === 'accLogin' ? accRules : phoneRule
     <h1 class="login-form__title">{{ loginConfig.title }}</h1>
 
     <div class="login-form__content">
-      <el-tabs 
-        v-model="activeName" 
-        type="border-card" 
-        stretch 
+      <el-tabs
+        v-model="activeName"
+        type="border-card"
+        stretch
         @tab-click="changeTab"
       >
         <el-tab-pane
@@ -89,7 +90,7 @@ const getRules = (type: LoginType) => type === 'accLogin' ? accRules : phoneRule
           </template>
           <LoginPanel
             :key="loginConfig[type].name"
-            :ref="(el)=>loginPanelRefs[type]=el as InstanceType<typeof LoginPanel>"  
+            :ref="(el)=>loginPanelRefs[type]=el as InstanceType<typeof LoginPanel>"
             v-if="activeName === loginConfig[type].name"
             :config="getConfig(type)"
             :rules="getRules(type)"
@@ -139,7 +140,7 @@ const getRules = (type: LoginType) => type === 'accLogin' ? accRules : phoneRule
   }
 
   &__submit {
-    height: 2.5rem;   
+    height: 2.5rem;
   }
 
   :deep(.el-tabs) {

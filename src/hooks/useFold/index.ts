@@ -1,2 +1,2 @@
-export { useFold } from './handle'
-export type { IFoldManager, FoldMode } from './types'
+export { useFold } from "./handle";
+export type { IFoldManager } from "./types";

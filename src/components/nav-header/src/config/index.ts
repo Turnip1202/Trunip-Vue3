@@ -1,1 +1,1 @@
-export * from "./language.config"
+export * from "./language.config";

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TestContent from '@/components/a-test'
+import TestContent from "@/components/a-test";
 </script>
 
 <template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useDark, useToggle } from '@vueuse/core'
-import { Moon, Sunny } from '@element-plus/icons-vue'
+import { Moon, Sunny } from "@element-plus/icons-vue";
+import { useDark, useToggle } from "@vueuse/core";
 
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 </script>
 
 <template>

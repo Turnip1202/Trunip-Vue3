@@ -25,8 +25,6 @@ declare module 'vue' {
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
-    ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
-    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
@@ -35,7 +33,6 @@ declare module 'vue' {
     PageContent: typeof import('./src/components/page-content/src/page-content.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Test: typeof import('./src/components/a-test/scr/Test.vue')['default']
     TestContent: typeof import('./src/components/a-test/src/test-content.vue')['default']
     TestStorage: typeof import('./src/components/a-test/src/test-storage.vue')['default']
   }
