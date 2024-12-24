@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type {LoginFormData} from "../types"
-
 import type {
 	AccFormRulesType,
 	AccountConfigType,
 	PhoneConfigType,
 	PhoneFormRulesType,
+  LoginFormData,
 } from "../types";
 import type {FormInstance} from "element-plus";
-defineOptions({
-	name: "LoginPanel",
-});
+
 const formRef = ref<FormInstance>()
 
 const props =defineProps<{
@@ -25,12 +22,15 @@ const loginData = ref<LoginFormData>(props.config.reduce((acc, item) => {
   return acc;
 }, {} as LoginFormData));
 const  validate =  () => {
-console.log("被校验了")
+    console.log("被校验了")
 };
 // 暴露适配器方法
 defineExpose({
 	validate: () => formRef.value?.validate(),
 	getFormData: () => loginData.value,
+});
+defineOptions({
+	name: "LoginPanel",
 });
 </script>
 

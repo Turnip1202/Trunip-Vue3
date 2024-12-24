@@ -1,12 +1,19 @@
 <script setup lang="ts">
+// 引入依赖
 import { computed, ref } from "vue";
-import { accRules, accountConfig, phoneConfig, phoneRules } from "../config";
-import type { LoginConfigType } from "../types";
+// 引入配置
+import { 
+  loginTypes,
+ } from "../config";
+// 引入类型
+import type { LoginConfigType,LoginType } from "../types";
 // biome-ignore lint/style/useImportType: <explanation>
 import LoginPanel from "./login-panel.vue";
+import {getConfig,getRules} from "../hooks"
+
+// 引入api
 import {login} from "@/api/login";
 
-type LoginType = "accLogin" | "phoneLogin";
 
 const props = defineProps<{
 	config: LoginConfigType;
@@ -63,10 +70,6 @@ const handleSubmit = async () => {
 };
 const isAccountLogin = computed(() => loginConfig.value.isAccountLogin(activeName.value));
 
-const loginTypes: LoginType[] = ["accLogin", "phoneLogin"];
-
-const getConfig = (type: LoginType) => (type === "accLogin" ? accountConfig : phoneConfig);
-const getRules = (type: LoginType) => (type === "accLogin" ? accRules : phoneRules);
 </script>
 
 <template>
