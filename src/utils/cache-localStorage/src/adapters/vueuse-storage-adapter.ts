@@ -1,12 +1,13 @@
 import { useStorage } from "@vueuse/core";
 import type { StorageOptions } from "../types";
 import type { StorageAdapter } from "./storage-adapter";
+import { defaultOptions } from "../config";
 
 export class VueUseStorageAdapter implements StorageAdapter {
 	private prefix: string;
 	private defaultExpire: number;
 
-	constructor(options: StorageOptions = {}) {
+	constructor(options: StorageOptions = defaultOptions) {
 		this.prefix = options.prefix ?? "";
 		this.defaultExpire = options.expire ?? 0;
 	}

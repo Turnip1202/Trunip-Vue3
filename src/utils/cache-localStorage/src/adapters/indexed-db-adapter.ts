@@ -1,11 +1,12 @@
 import { IndexedDB } from "../indexedDB";
 import type { StorageOptions } from "../types";
 import type { StorageAdapter } from "./storage-adapter";
+import {defaultOptions} from "../config"
 
 export class IndexedDBAdapter implements StorageAdapter {
 	private db: IndexedDB;
 
-	constructor(options: StorageOptions = {}) {
+	constructor(options: StorageOptions = defaultOptions) {
 		this.db = new IndexedDB({
 			dbName: options.dbName ?? "app_db",
 			storeName: options.storeName ?? "app_store",

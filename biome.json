@@ -24,7 +24,7 @@
 		"rules": {
 			"recommended": true,
 			"suspicious": {
-				"noExplicitAny": "error",
+				"noExplicitAny": "warn",
 				"noConsoleLog": "warn"
 			},
 			"style": {
@@ -34,7 +34,8 @@
 			},
 			"complexity": {
 				"noForEach": "warn",
-				"useOptionalChain": "error"
+				"useOptionalChain": "error",
+				"useArrowFunction":"warn"
 			}
 		}
 	},

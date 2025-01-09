@@ -4,7 +4,7 @@ import type { paramsType } from "./types";
 import adapterFetch from 'alova/fetch';
 
 export const alovaInstance = createAlova({
-    baseURL:"http://127.0.0.1:3002/api_v1",
+    baseURL:"http://127.0.0.1:8033/",
     requestAdapter: adapterFetch(),
     responded: response => response.json(),
 });

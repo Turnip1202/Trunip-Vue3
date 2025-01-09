@@ -6,6 +6,7 @@ import type {
 	PhoneConfigType,
 	PhoneFormRulesType,
   LoginFormData,
+  validatorType,
 } from "../types";
 import type {FormInstance} from "element-plus";
 
@@ -21,8 +22,8 @@ const loginData = ref<LoginFormData>(props.config.reduce((acc, item) => {
   acc[item.prop] = "";
   return acc;
 }, {} as LoginFormData));
-const  validate =  () => {
-    console.log("被校验了")
+const  validate:validatorType =  (prop,isValid,message) => {
+    console.log("被校验了",prop,isValid,message)
 };
 // 暴露适配器方法
 defineExpose({
@@ -39,7 +40,7 @@ defineOptions({
     <el-form  ref="formRef" @validate="validate" :model="loginData" size="large" :rules="rules">
       <template v-for="item in config" :key="item.id">
         <el-form-item :label="item.label" :prop="item.prop">
-          <el-input v-model="loginData[item.prop]"/>
+          <el-input v-model="loginData[item.prop]" :type="item.prop" autocapitalize="on"/>
         </el-form-item>
       </template>
     </el-form>

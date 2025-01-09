@@ -1,11 +1,12 @@
 import { LocalStorage } from "../localStorage";
 import type { StorageOptions } from "../types";
 import type { StorageAdapter } from "./storage-adapter";
+import { defaultOptions } from "../config";
 
 export class LocalStorageAdapter implements StorageAdapter {
 	private storage: LocalStorage;
 
-	constructor(options: StorageOptions = {}) {
+	constructor(options: StorageOptions = defaultOptions) {
 		this.storage = new LocalStorage(options);
 	}
 

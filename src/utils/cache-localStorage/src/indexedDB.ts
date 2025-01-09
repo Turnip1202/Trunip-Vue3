@@ -1,3 +1,4 @@
+import type{IndexedDBOptions} from "./types"
 /**
  * IndexedDB 封装类
  * 提供了简单易用的 IndexedDB 操作接口，支持:
@@ -8,22 +9,17 @@
  * 5. 错误处理
  */
 export class IndexedDB {
-	private db: IDBDatabase | null = null;
-	private readonly dbName: string;
-	private readonly storeName: string;
-	private readonly version: number;
-	private readonly defaultExpire: number;
+	private db: IDBDatabase | null = null; // 存储数据库实例
+	private readonly dbName: string; // 数据库名称
+	private readonly storeName: string; // 对象仓库名称
+	private readonly version: number; // 数据库版本号
+	private readonly defaultExpire: number; // 默认过期时间（秒）
 
-	constructor(options: {
-		dbName: string;
-		storeName: string;
-		version?: number;
-		expire?: number;
-	}) {
+	constructor(options:IndexedDBOptions) {
 		this.dbName = options.dbName;
 		this.storeName = options.storeName;
-		this.version = options.version ?? 1;
-		this.defaultExpire = options.expire ?? 0;
+		this.version = options.version ?? 1; // 版本号默认为1
+		this.defaultExpire = options.expire ?? 0; // 过期时间默认为0（永不过期）
 	}
 
 	/**
@@ -68,19 +64,25 @@ export class IndexedDB {
 	async set<T>(key: string, value: T, expire?: number): Promise<boolean> {
 		try {
 			const store = await this.getStore("readwrite");
-
+	
+			// 计算过期时间戳
+			let expirationTime: number | undefined;
+			if (expire !== undefined) {
+				expirationTime = Date.now() + expire * 1000;
+			} else if (this.defaultExpire > 0) {
+				expirationTime = Date.now() + this.defaultExpire * 1000;
+			}
+	
+			// 准备要存储的数据对象
+			const dataToStore = {
+				key,
+				value,
+				expire: expirationTime,
+			};
+	
 			return new Promise((resolve, reject) => {
-				const request = store.put({
-					key,
-					value,
-					expire:
-						expire !== undefined
-							? Date.now() + expire * 1000
-							: this.defaultExpire
-								? Date.now() + this.defaultExpire * 1000
-								: undefined,
-				});
-
+				const request = store.put(dataToStore);
+	
 				request.onsuccess = () => resolve(true);
 				request.onerror = () => reject(new Error("Failed to store data"));
 			});
@@ -89,6 +91,10 @@ export class IndexedDB {
 			return false;
 		}
 	}
+	
+	
+	
+	
 
 	/**
 	 * 获取数据

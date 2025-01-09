@@ -1,9 +1,10 @@
-
+import type {FormItemProp} from "element-plus"
+export type validatorType = (prop: FormItemProp, isValid: boolean, message: string) => void
 
 interface LoginConfigType {
 	title: string;
 	accLogin: {
-		name: string;
+		name: number;
 		title: string;
 		label: string;
 		placeholder: string;
@@ -12,7 +13,7 @@ interface LoginConfigType {
 		register: string;
 	};
 	phoneLogin: {
-		name: string;
+		name: number;
 		title: string;
 		label: string;
 		placeholder: string;

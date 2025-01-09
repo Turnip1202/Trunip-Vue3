@@ -3,6 +3,7 @@ import { LocalStorageAdapter } from "./adapters/local-storage-adapter";
 import type { StorageAdapter } from "./adapters/storage-adapter";
 import { VueUseStorageAdapter } from "./adapters/vueuse-storage-adapter";
 import type { StorageOptions } from "./types";
+import  {defaultOptions} from "./config"
 
 export type StorageType = "localStorage" | "vueuse" | "indexedDB";
 
@@ -13,20 +14,20 @@ export type StorageType = "localStorage" | "vueuse" | "indexedDB";
  * @returns StorageAdapter 实例
  *
  * @example
- * // 使用 LocalStorage
+ *  使用 LocalStorage
  * const storage = createStorage('localStorage', {
  *   prefix: 'myApp_',
  *   expire: 3600,
  *   encryption: true
  * })
  *
- * // 使用 VueUse Storage
+ *  使用 VueUse Storage
  * const storage = createStorage('vueuse', {
  *   prefix: 'myApp_',
  *   expire: 3600
  * })
  */
-export function createStorage(type: StorageType, options: StorageOptions = {}): StorageAdapter {
+export function createStorage(type: StorageType, options: StorageOptions = defaultOptions): StorageAdapter {
 	switch (type) {
 		case "localStorage":
 			return new LocalStorageAdapter(options);

@@ -2,17 +2,19 @@
 // 引入依赖
 import { computed, ref } from "vue";
 // 引入配置
-import { 
+import {
   loginTypes,
  } from "../config";
 // 引入类型
 import type { LoginConfigType,LoginType } from "../types";
+import type { ILoginData } from "@/types/user"
+
 // biome-ignore lint/style/useImportType: <explanation>
 import LoginPanel from "./login-panel.vue";
 import {getConfig,getRules} from "../hooks"
 
-// 引入api
-import {login} from "@/api/login";
+// 这里引入pinia，因为请求是在pinia中发送的
+import {useUserStore} from "@/store/user"
 
 
 const props = defineProps<{
@@ -21,10 +23,10 @@ const props = defineProps<{
 
 const loginConfig = computed(() => ({
 	...props.config,
-	isAccountLogin: (name: string) => name === props.config.accLogin.name,
+	isAccountLogin: (name: number) => name === props.config.accLogin.name,
 }));
 
-const activeName = ref(loginConfig.value.accLogin.name);
+const activeName = ref<number>(loginConfig.value.accLogin.name);
 // 修改ref的声明方式
 const loginPanelRefs = ref<Record<LoginType, InstanceType<typeof LoginPanel> | null>>({
 	accLogin: null,
@@ -32,7 +34,7 @@ const loginPanelRefs = ref<Record<LoginType, InstanceType<typeof LoginPanel> | n
 });
 const isRemember = ref(false);
 
-const changeTab = (tab: { paneName: string }) => {
+const changeTab = (tab: { paneName: number }) => {
 	activeName.value = tab.paneName;
 };
 
@@ -53,20 +55,38 @@ const handleSubmit = async () => {
 	// 验证表单
 	const { getFormData, validate } = await currentPanel;
   const data = await getFormData();
-	// 验证表单
-	const valid = await validate();
-  console.log("valid", valid);
-  console.log("data", data);
-	if (!valid) return;
 
-	// 构建登录数据
+
+  const toLogin = () => {
+    	// 构建登录数据
 	const loginData = {
 		type: activeName.value,
-		remember: isRemember.value,
+		// remember: isRemember.value,
 		...data,
-	};
-  login({...loginData})
+	} as ILoginData;
+
+  useUserStore().login(loginData)
 	console.log("登录数据:", loginData);
+  };
+
+	// 验证表单
+  validate()?.then(console.log).then(toLogin).catch(console.error)
+
+//   try {
+// 	const valid = await validate();
+//   console.log("valid", valid);
+//   console.log("data", data);
+//     if(!valid){
+//       return
+//     }
+// }
+//   catch (e) {
+//     console.error("error", e);
+//   }
+
+
+
+
 };
 const isAccountLogin = computed(() => loginConfig.value.isAccountLogin(activeName.value));
 

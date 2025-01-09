@@ -3,8 +3,8 @@ import piniaPersist from "pinia-plugin-persistedstate";
 import type { App } from "vue";
 const store = createPinia();
 const registerStore = (app: App<Element>) => {
-	store.use(piniaPersist);
 	app.use(store);
+	store.use(piniaPersist);
 };
 
 export default registerStore;

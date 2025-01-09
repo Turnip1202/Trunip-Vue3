@@ -43,7 +43,7 @@ export class LocalStorage {
 	 *   encryption: true       // 启用加密
 	 * })
 	 */
-	constructor(options: StorageOptions = {}) {
+	constructor(options: StorageOptions ) {
 		this.prefix = options.prefix ?? STORAGE_CONFIG.storage.prefix;
 		this.defaultExpire = options.expire ?? STORAGE_CONFIG.storage.expire;
 		this.encryption = options.encryption ?? false;

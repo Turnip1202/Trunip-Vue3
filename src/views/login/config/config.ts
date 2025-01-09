@@ -2,7 +2,7 @@ import type { LoginConfigType } from "../types";
 export const loginConfig: LoginConfigType = {
 	title: "后台管理系统",
 	accLogin: {
-		name: "account",
+		name: 1,
 		title: "账号密码登录",
 		label: "账号密码登录",
 		placeholder: "请输入账号密码",
@@ -14,7 +14,7 @@ export const loginConfig: LoginConfigType = {
 		register: "立即注册",
 	},
 	phoneLogin: {
-		name: "phone",
+		name: 2,
 		title: "手机号登录",
 		label: "手机号登录",
 		placeholder: "请输入手机号",
