@@ -1,5 +1,8 @@
 {
 	"compilerOptions": {
+		"composite": true,
+
+
 		"paths": {
 			"@/*": ["./src/*"]
 		},
@@ -13,10 +16,9 @@
 
 		/* Bundler mode */
 		"moduleResolution": "Bundler",
-		"allowImportingTsExtensions": true,
 		"isolatedModules": true,
 		"moduleDetection": "force",
-		"noEmit": true,
+		"noEmit": false,
 		"jsx": "preserve",
 
 		/* Linting */

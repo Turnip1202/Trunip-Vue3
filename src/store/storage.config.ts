@@ -4,12 +4,10 @@ import type {StorageType,IndexedDBOptions} from "@/utils"
 
 const options:IndexedDBOptions = {
     dbName:"Turnip-Vue3",
-    storeName:"Pinia",
+    storeName:"Pinia_Store",
     version:1,
     expire:0
 }
 
 const storageType:StorageType = "indexedDB";
-export const LSInstance = createStorage(storageType)
-console.log("LSInstance",LSInstance)
-LSInstance.set("test","test")
+export const LSInstance = createStorage(storageType,options)

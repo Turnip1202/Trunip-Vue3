@@ -12,8 +12,8 @@ export interface StorageItem<T = unknown> {
 //   encryptionKey?: string  // 可选的加密密钥
 // }
 export interface IndexedDBOptions {
-	dbName: string;
-	storeName: string;
+	dbName?: string;
+	storeName?: string;
 	version?: number;
 	expire?: number;
 }

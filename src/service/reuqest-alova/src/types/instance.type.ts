@@ -6,3 +6,5 @@ export interface InstanceType{
 export type paramsType = {
     [key:string]:unknown
 }
+
+

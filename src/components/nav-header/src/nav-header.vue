@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import UserProfile from "@/base-ui/user-profile"
+
 import { useFold } from "@/hooks/useFold";
 import { ArrowDown, Expand, Fold } from "@element-plus/icons-vue";
 import { computed, ref } from "vue";
@@ -48,7 +50,12 @@ const getCurrentLanguage = computed((): LanguageItem | undefined => {
     </div>
     
     <div class="right">
-      <el-dropdown @command="handleCommand">
+      <div class="right-items">
+        <div class="user-profile-wrapper">
+          <UserProfile></UserProfile>
+        </div>
+        <div class="language-wrapper">
+          <el-dropdown @command="handleCommand">
         <span class="lang-dropdown">
           {{ getCurrentLanguage?.name }}
           <el-icon class="el-icon--right">
@@ -67,6 +74,8 @@ const getCurrentLanguage = computed((): LanguageItem | undefined => {
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -77,7 +86,7 @@ const getCurrentLanguage = computed((): LanguageItem | undefined => {
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 0 16px;
+  padding: 0 6px;
   
   .left {
     .el-icon {
@@ -87,17 +96,36 @@ const getCurrentLanguage = computed((): LanguageItem | undefined => {
   }
   
   .right {
-    .lang-dropdown {
+    display: flex;
+  
+    .right-items{
+
       display: flex;
-      align-items: center;
-      cursor: pointer;
-      outline: none;
-      
-      .el-icon {
-        margin-left: 4px;
-        font-size: 12px;
+        align-items: center;
+        justify-content: flex-end; // 内容靠右对齐
+        gap: 5px; // 组件之间的间距
+
+      .user-profile-wrapper {
+        margin-right: 12px;
+      }
+
+
+
+      .language-wrapper{
+        .lang-dropdown {
+            align-items: center;
+            cursor: pointer;
+            outline: none;
+            
+            .el-icon {
+              margin-left: 4px;
+              font-size: 12px;
+            }
+          }
       }
     }
+
+
 
     :deep(.el-dropdown__popper) {
       outline: none;

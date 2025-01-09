@@ -7,6 +7,7 @@ export class IndexedDBAdapter implements StorageAdapter {
 	private db: IndexedDB;
 
 	constructor(options: StorageOptions = defaultOptions) {
+		console.log("options", options);
 		this.db = new IndexedDB({
 			dbName: options.dbName ?? "app_db",
 			storeName: options.storeName ?? "app_store",

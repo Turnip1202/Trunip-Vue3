@@ -14,9 +14,9 @@ export const STORAGE_CONFIG = {
 
 // 默认配置
 export const defaultOptions:StorageOptions = {
-	dbName: "",
-	storeName: "",
-	prefix: "",
+	dbName: "app_db",
+	storeName: "app_store",
+	prefix: "KY_",
 	expire: 0,
 	encryption: false,
 	encryptionKey: "",

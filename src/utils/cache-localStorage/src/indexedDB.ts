@@ -16,8 +16,8 @@ export class IndexedDB {
 	private readonly defaultExpire: number; // 默认过期时间（秒）
 
 	constructor(options:IndexedDBOptions) {
-		this.dbName = options.dbName;
-		this.storeName = options.storeName;
+		this.dbName = options.dbName|| "app_db";
+		this.storeName = options.storeName|| "app_store";
 		this.version = options.version ?? 1; // 版本号默认为1
 		this.defaultExpire = options.expire ?? 0; // 过期时间默认为0（永不过期）
 	}

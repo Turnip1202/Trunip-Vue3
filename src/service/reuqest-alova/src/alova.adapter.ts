@@ -10,13 +10,13 @@ export const alovaInstance = createAlova({
 });
 
 class AlovaAdapter{
-    get(url:string,data?:paramsType){
-        return alovaInstance.Get(url,{
+    get<T>(url:string,data?:paramsType){
+        return alovaInstance.Get<T>(url,{
             params:data
         })
     }
-    post(url:string,data?:RequestBody){
-        return alovaInstance.Post(url,data)
+    post<T>(url:string,data?:RequestBody){
+        return alovaInstance.Post<T>(url,data)
     }
 }
 

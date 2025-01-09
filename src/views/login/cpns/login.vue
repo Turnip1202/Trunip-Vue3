@@ -17,6 +17,8 @@ import {getConfig,getRules} from "../hooks"
 import {useUserStore} from "@/store/user"
 
 
+
+
 const props = defineProps<{
 	config: LoginConfigType;
 }>();
@@ -64,25 +66,12 @@ const handleSubmit = async () => {
 		// remember: isRemember.value,
 		...data,
 	} as ILoginData;
-
-  useUserStore().login(loginData)
 	console.log("登录数据:", loginData);
+  useUserStore().login(loginData)
   };
 
 	// 验证表单
   validate()?.then(console.log).then(toLogin).catch(console.error)
-
-//   try {
-// 	const valid = await validate();
-//   console.log("valid", valid);
-//   console.log("data", data);
-//     if(!valid){
-//       return
-//     }
-// }
-//   catch (e) {
-//     console.error("error", e);
-//   }
 
 
 
