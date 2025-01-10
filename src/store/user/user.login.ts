@@ -32,14 +32,14 @@ export const useUserStore = defineStore('user-login',()=>{
         userInfo: null,
         loading: false,
         error: null
-    });  
+    });
     const initState = (initialState: Partial<IUserState>) => {
         state.value = {
             ...state.value,
             ...initialState
         };
     };
-        
+
     const login = async (data:ILoginData) => {
         state.value.loading = true;
         state.value.error = null;
@@ -56,18 +56,18 @@ export const useUserStore = defineStore('user-login',()=>{
             state.value.token = res.data.tkToken;
             state.value.userID = res.data.id;
             LSInstance.set("loginData",res.data)
-            
+
             console.log(await LSInstance.get("loginData"))
-   
+
 
             const userinfo = await getUserInfo(state.value.userID);
-            console.log("sss",userinfo);
-            if(!userinfo?.success) {
+            console.log("userinfo",userinfo);
+            if(userinfo?.success) {
                 router.push("/main");
                 return userinfo;
             }
             ElMessage.error(`登录失败：${userinfo.msg}---${userinfo.errors}`);
-            
+
 
         } catch (error) {
             state.value.error = error;
@@ -81,7 +81,6 @@ export const useUserStore = defineStore('user-login',()=>{
         try {
             const userinfo = await userApi.getUserInfo(id);
             state.value.userInfo = userinfo.data;
-            console.log("userinfo",userinfo);
             return userinfo;
         } catch (error) {
             state.value.error = error;

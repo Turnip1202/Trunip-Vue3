@@ -3,8 +3,9 @@ import type { paramsType } from "./types";
 // import VueHook  from "alova/vue";
 import adapterFetch from 'alova/fetch';
 
+
 export const alovaInstance = createAlova({
-    baseURL:"http://127.0.0.1:8033/",
+    baseURL:import.meta.env.VITE_TURNIP_WALLPAPER_URL,
     requestAdapter: adapterFetch(),
     responded: response => response.json(),
 });
