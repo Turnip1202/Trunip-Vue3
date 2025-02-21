@@ -1,9 +1,15 @@
 import { defineStore } from 'pinia';
 import userApi from '@/api/user';
 import { ref ,computed} from 'vue';
-import type { ILoginData } from "@/types/user"
+import type { ILoginData,ICaptchaType } from "@/types/user"
 import {LSInstance} from "../storage.config"
 import router from "@/router"
+
+import {showErrors} from '@/utils'
+
+
+import { v4 as uuidv4 } from 'uuid';
+
 
 // 提取 Promise 中的实际类型
 type UnwrapPromise<T> = T extends Promise<infer U>? U : never;
@@ -16,11 +22,14 @@ type IUserInfoType = UnwrapPromise<ReturnType<typeof userApi.getUserInfo>>;
 type IUserInfoVO = IUserInfoType["data"];
 
 
+
+
 interface IUserState {
   token: string | null;
   userID: number| null;
   userInfo: IUserInfoVO| null;
   loading: boolean;
+  captchaInfo: ICaptchaType | null;
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   error: any;
 }
@@ -31,6 +40,7 @@ export const useUserStore = defineStore('user-login',()=>{
         userID: null,
         userInfo: null,
         loading: false,
+        captchaInfo: null,
         error: null
     });
     const initState = (initialState: Partial<IUserState>) => {
@@ -47,7 +57,7 @@ export const useUserStore = defineStore('user-login',()=>{
             const res = await userApi.login(data);
             console.log("loginData",res);
             if(!res.success) {
-                ElMessage.error(`登录失败：${res.msg}---${res.errors}`);
+                ElMessage.error(showErrors(res));
                 return res.success;
             }
 
@@ -66,7 +76,9 @@ export const useUserStore = defineStore('user-login',()=>{
                 router.push("/main");
                 return userinfo;
             }
-            ElMessage.error(`登录失败：${userinfo.msg}---${userinfo.errors}`);
+            const str = `登录失败：${userinfo?.msg}---${userinfo?.errors??""}`
+
+            ElMessage.error(showErrors(userinfo));
 
 
         } catch (error) {
@@ -89,6 +101,17 @@ export const useUserStore = defineStore('user-login',()=>{
         }
     };
 
+    const getCaptcha = async (params: { [key: string]: unknown }) => {
+        const res  =  await userApi.captchaApi.getCaptcha(params);
+        state.value.captchaInfo = res.data;
+        return res;
+       //console.log("getCaptcha",res)
+    }
+    getCaptcha({uuid:uuidv4()})
+
+const setCaptchaInfo = (captchaInfo: ICaptchaType) => {
+    state.value.captchaInfo = captchaInfo;
+}
     const logout = () => {
         router.push("/login");
         LSInstance.clear();
@@ -103,6 +126,8 @@ export const useUserStore = defineStore('user-login',()=>{
         login,
         logout,
         getUserInfo,
+        setCaptchaInfo,
+        getCaptcha,
         isAuthenticated,
         initState
     }

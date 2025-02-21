@@ -16,6 +16,16 @@ export interface ResponseData {
     timestamp: string;
     errors: null | any;
 }
+export type ICaptchaType = {
+    uuid: string;
+    captcha: string;
+    type: string;
+};
+
+
+
+
+
 export interface VerificationCodeConfig {
     // 基础配置
     width: number

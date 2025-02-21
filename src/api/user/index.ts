@@ -1,4 +1,4 @@
-import {login,getUserInfo} from "./login"
+import {login,getUserInfo,captchaApi} from "./login"
 
 
 
@@ -6,4 +6,5 @@ import {login,getUserInfo} from "./login"
 export default {
     login,
     getUserInfo,
+    captchaApi,
 }

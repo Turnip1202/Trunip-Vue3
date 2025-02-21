@@ -14,7 +14,9 @@ import LoginPanel from "./login-panel.vue";
 import {getConfig,getRules} from "../hooks"
 
 // 这里引入pinia，因为请求是在pinia中发送的
-import {useUserStore} from "@/store/user"
+import { useUserStore } from "@/store/user"
+
+
 
 
 

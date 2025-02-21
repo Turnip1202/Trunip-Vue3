@@ -1,4 +1,4 @@
-import type { ResponseData } from "@/types/user"; 
+import type { ResponseData,ICaptchaType } from "@/types/user"; 
 export interface ILoginType extends ResponseData{
     data:AdminUserLoginVO
 }
@@ -30,4 +30,14 @@ interface AdminUserInfoVO {
     createdAt?: string;
     updatedAt?: string;
     deletedAt?: string;
+}
+
+
+export interface CaptchaResponse extends ResponseData{
+   data:ICaptchaType
+}
+
+export interface VerificationResult {
+    success: boolean;
+    message: string;
 }

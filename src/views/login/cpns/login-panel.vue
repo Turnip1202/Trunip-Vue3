@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import type {FormInstance} from "element-plus";
+import { ref,computed,watch} from "vue";
+import type { FormInstance } from "element-plus";
+import { v4 as uuidv4 } from 'uuid';
+import type{ICaptchaType} from "@types/user"
+
+
 import type {
 	AccFormRulesType,
 	AccountConfigType,
@@ -10,30 +14,48 @@ import type {
   validatorType,
 } from "../types";
 
-import type { VerificationCodeConfig } from '@/types'
+import { useUserStore } from '@/store/user' // 假设这是你的 Pinia store
 
-import  VerificationCode from "@/base-ui/verification-code"
-const code = ref<string>("")
+
+  // 从 Pinia 获取验证码信息
+
+
 const inputCode = ref('')
 const codeRef = ref()
 
-// 自定义配置
-const verificationConfig: Partial<VerificationCodeConfig> = {
-  width: 150,
-  height: 50,
-  length: 6,
-  fontSize: [30, 35],
-  effects: ['shadow', 'glow'],
-  noise: true,
-  dots: true,
-  autoRefresh: true,
-  refreshInterval: 30000,
-  // 自定义渲染器示例
+//从store中获取验证码
 
-}
+const userStore = useUserStore();
 
-const onRefresh = (newCode: string) => {
-  console.log('新的验证码:', newCode)
+// 使用 computed 监听 captchaInfo 的变化
+const captchaInfo = computed({
+  get: () => userStore.state.captchaInfo,
+  set: (newCaptchaInfo: ICaptchaType) => {
+    userStore.setCaptchaInfo(newCaptchaInfo);
+  },
+});
+
+// 使用 watch 监听 captchaInfo 的变化并执行额外逻辑
+watch(
+  () => userStore.state.captchaInfo,
+  (newCaptchaInfo) => {
+    console.log('captchaInfo 发生变化:', newCaptchaInfo);
+    captchaInfo.value = newCaptchaInfo;
+    // 在这里可以执行一些额外的逻辑
+  },
+  { deep: true }
+);
+
+// const userStore = useUserStore()
+// useUserStore().getCaptcha({uuid: uuidv4()}).then(res => {
+//   captcha.value = res.data.captcha
+// })
+
+
+
+const onRefresh = () => {
+  userStore.getCaptcha({uuid: uuidv4()})
+  console.log('新的验证码对应的uuid:', captchaInfo.value.uuid)
 }
 
 const onVerify = (isValid: boolean) => {
@@ -80,15 +102,14 @@ defineOptions({
       <template v-for="item in config" :key="item.id">
         <el-form-item :label="item.label" :prop="item.prop">
           <template v-if="item.prop === 'code'">
-            <VerificationCode
-                v-model="code"
-                :config="verificationConfig"
-                @refresh="onRefresh"
-                @verify="onVerify"
-                ref="codeRef"
-            />
+            <div>
+            <el-input v-model="loginData[item.prop]" :type="item.prop"  autocapitalize="on"/>
+            <el-image @click="onRefresh" style="width: 100px; height: 50px;cursor:pointer" :src="captchaInfo?.captcha" fit="contain" />
+            </div>
           </template>
-          <el-input v-model="loginData[item.prop]" :type="item.prop" autocapitalize="on"/>
+          <template v-else>
+            <el-input v-model="loginData[item.prop]" :type="item.prop"  autocapitalize="on"/>
+          </template>
         </el-form-item>
       </template>
     </el-form>
