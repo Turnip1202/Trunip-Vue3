@@ -1,4 +1,5 @@
-import {login,getUserInfo,captchaApi} from "./login"
+import { login, getUserInfo, captchaApi } from "./login"
+
 
 
 

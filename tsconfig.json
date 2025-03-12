@@ -1,5 +1,25 @@
 {
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": [
+				"./src/*"
+			]
+		}
+	},
 	"files": [],
-	"references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
-    "include": ["env.d.ts", "auto-imports.d.ts", "src/**/*", "src/**/*.vue"],
+	"references": [
+		{
+			"path": "./tsconfig.app.json"
+		},
+		{
+			"path": "./tsconfig.node.json"
+		}
+	],
+	"include": [
+		"env.d.ts",
+		"auto-imports.d.ts",
+		"src/**/*",
+		"src/**/*.vue"
+	],
 }

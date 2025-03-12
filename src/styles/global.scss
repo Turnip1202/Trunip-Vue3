@@ -1,6 +1,14 @@
 // import dark theme
 @use "element-plus/theme-chalk/src/dark/css-vars.scss" as *;
 
+.el-tooltip__trigger:focus-visible {
+  outline: unset;
+}
+
+// .el-menu--horizontal {
+//   --el-menu-horizontal-height: 100px;
+// }
+
 // :root {
 //   --ep-color-primary: red;
 // }
@@ -24,7 +32,7 @@ code {
   color: var(--el-color-primary);
 }
 
-#app{
+#app {
   width: 100%;
   height: 100%;
 }

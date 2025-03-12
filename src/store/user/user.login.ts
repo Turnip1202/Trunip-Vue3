@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import userApi from '@/api/user';
+import userApi from "@/api/user";
 import { ref ,computed} from 'vue';
 import type { ILoginData,ICaptchaType } from "@/types/user"
 import {LSInstance} from "../storage.config"
@@ -91,6 +91,7 @@ export const useUserStore = defineStore('user-login',()=>{
         state.value.loading = true;
         state.value.error = null;
         try {
+            console.log("getUserInfo",id);
             const userinfo = await userApi.getUserInfo(id);
             state.value.userInfo = userinfo.data;
             return userinfo;

@@ -2,7 +2,7 @@
 import { ref,computed,watch} from "vue";
 import type { FormInstance } from "element-plus";
 import { v4 as uuidv4 } from 'uuid';
-import type{ICaptchaType} from "@types/user"
+import type{ICaptchaType} from "@/types/user"
 
 
 import type {

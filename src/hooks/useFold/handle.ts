@@ -2,6 +2,7 @@ import { useLayoutStore } from "@/store/layout";
 import { computed, ref } from "vue";
 import { FOLD_MODE } from "./constant";
 import type { IFoldManager } from "./types";
+import {logger } from "@/utils"
 
 function createPropsFoldManager(
 	modelValue: boolean,
@@ -53,11 +54,10 @@ export function useFold<T, E extends boolean | undefined>(
 		mode === FOLD_MODE.PROPS && emit !== undefined && modelValue !== undefined;
 
 	if (isValidPropsMode) {
-		console.warn("props mode start...");
+		logger.success("⚡[PROPS MODE]⚡")
 		return createPropsFoldManager(modelValue, emit);
 	}
-
-	console.warn("pinia mode start...");
+	logger.success("⚡[PINIA MODE]⚡")
 	// 不满足 Props 模式条件时，降级使用 Pinia 模式
 	return createPiniaFoldManager();
 }

@@ -17,7 +17,7 @@
 
   // 获取要显示的值，支持数据映射和默认值
   const getDisplayValue = (key: keyof AdminUserInfoVO) => {
-    console.log("UserProfile-userinfo",userInfo.value)
+   // console.log("UserProfile-userinfo",userInfo.value)
     if (userInfo.value && key in userInfo.value) {
       return userInfo.value[key];
     }

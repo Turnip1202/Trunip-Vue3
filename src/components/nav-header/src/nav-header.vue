@@ -105,8 +105,15 @@ const getCurrentLanguage = computed((): LanguageItem | undefined => {
         justify-content: flex-end; // 内容靠右对齐
         gap: 5px; // 组件之间的间距
 
+        .el-dropdown:focus-visible{
+          outline: unset;
+        }
+
       .user-profile-wrapper {
         margin-right: 12px;
+      }
+      .user-profile-wrapper:hover{
+        border: none;
       }
 
 
