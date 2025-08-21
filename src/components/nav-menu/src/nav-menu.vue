@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="tsx" setup>
 import { ref, onMounted } from 'vue';
 import type {  ParsedMenuItem } from "./types"
 import { parseMenuData } from './utils';
@@ -46,7 +46,7 @@ onMounted( async() => {
           </template>
 <!--          <el-menu-item-group>-->
             <el-menu-item v-for="child in item.children"  :key="child.index" :index="child.path">
-             {{ child.title}}-{{child.path }}
+             {{ child.title}}
             </el-menu-item>
 <!--          </el-menu-item-group>-->
         </el-sub-menu>
