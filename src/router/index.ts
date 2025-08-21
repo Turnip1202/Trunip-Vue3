@@ -14,13 +14,34 @@ const routes: RouteRecordRaw[] = [
 	{
 		path: "/main",
 		name: "main",
+		redirect: "/main/dashboard",
 		component: () => import("@/views/main/index.vue"),
+		children: [
+			{
+				path: "/main/dashboard",
+				name:"dashboard",
+				component: () => import("@/views/system/dashboard/index.vue"),
+			},
+			{
+				path:"/main/system/users",
+				name:"users",
+				component: () => import("@/views/system/users/index.vue"),
+			},
+			{
+				path:"/main/system/menus",
+				name:"menus",
+				component: () => import("@/views/system/menus/index.vue"),
+			},
+
+		]
+
 	},
 	{
 		path: "/login",
 		name: "login",
 		component: () => import("@/views/login/index.vue"),
 	},
+
 	{
 		path: "/:pathMatch(.*)*",
 		name: "error",
@@ -34,14 +55,15 @@ const router = createRouter({
 });
 router.beforeEach(async(to:RouteLocationNormalizedLoadedGeneric, from:RouteLocationNormalizedLoadedGeneric) => {
 	try {
-        const loginData = await getLoginData();
+		const loginData = await getLoginData();//获取本地的登录数据
+		console.log(from)
 
         if (isLoginPage(to)) {
             return handleLoginPageNavigation(loginData);
         } 
 		return handleOtherPageNavigation(loginData);
     } catch (error) {
-        console.error("Failed to get login data from local storage:", error);
+        console.error("无法从本地存储获取登录数据:", error);
         return "/login";
     }
 });

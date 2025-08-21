@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref,computed,watch} from "vue";
+import { ref,computed,watch,onMounted} from "vue";
 import type { FormInstance } from "element-plus";
 import { v4 as uuidv4 } from 'uuid';
 import type{ICaptchaType} from "@/types/user"
@@ -24,9 +24,12 @@ const inputCode = ref('')
 const codeRef = ref()
 
 //从store中获取验证码
-
 const userStore = useUserStore();
 
+onMounted(() => {
+  userStore.getCaptcha({uuid: uuidv4()});
+  console.log('获取验证码成功');
+});
 // 使用 computed 监听 captchaInfo 的变化
 const captchaInfo = computed({
   get: () => userStore.state.captchaInfo,
@@ -102,10 +105,10 @@ defineOptions({
       <template v-for="item in config" :key="item.id">
         <el-form-item :label="item.label" :prop="item.prop">
           <template v-if="item.prop === 'code'">
-            <div>
-            <el-input v-model="loginData[item.prop]" :type="item.prop"  autocapitalize="on"/>
-            <el-image @click="onRefresh" style="width: 100px; height: 50px;cursor:pointer" :src="captchaInfo?.captcha" fit="contain" />
-            </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <el-input v-model="loginData[item.prop]" :type="item.prop" autocapitalize="on" style="flex: 1;"/>
+                <el-image @click="onRefresh" style="cursor:pointer; width: 120px; height: 40px;" :src="captchaInfo?.captcha" fit="contain" />
+              </div>
           </template>
           <template v-else>
             <el-input v-model="loginData[item.prop]" :type="item.prop"  autocapitalize="on"/>

@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"types": ["vue", "node"],
 		"baseUrl": ".",
 		"paths": {
 			"@/*": [
@@ -18,6 +19,7 @@
 	],
 	"include": [
 		"env.d.ts",
+		"element-puls.d.ts",
 		"auto-imports.d.ts",
 		"src/**/*",
 		"src/**/*.vue"

@@ -14,7 +14,8 @@ export const parseMenuData = (data: MenuItem[]): ParsedMenuItem<string>[] => {
         title: item.name,
         icon: getIconComponent(item.icon),
         children: [],
-        sort: item.sort // 添加 sort 字段
+        sort: item.sort,// 添加 sort 字段
+        path: item.path, 
       });
     }
     const menuItem = map.get(item.id)!;
@@ -29,7 +30,8 @@ export const parseMenuData = (data: MenuItem[]): ParsedMenuItem<string>[] => {
           title: '', // 初始设置为空字符串
           icon: undefined, // 初始设置为 undefined
           children: [],
-          sort: item.sort // 添加 sort 字段
+          sort: item.sort,// 添加 sort 字段
+          path: item.path,
         });
       }
       const parent = map.get(item.parentId!)!;

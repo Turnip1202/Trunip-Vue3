@@ -28,6 +28,7 @@ onMounted( async() => {
 <template>
   <div class="nav-menu">
     <el-menu
+      router
       class="el-menu-vertical"
       :collapse="collapse"
       :collapse-transition="true"
@@ -43,9 +44,11 @@ onMounted( async() => {
             <el-icon v-if="item.icon"><component :is="item.icon" /></el-icon>
             <span>{{ item.title }}</span>
           </template>
-          <el-menu-item-group>
-            <el-menu-item v-for="child in item.children" :key="child.index" :index="child.index">{{ child.title }}</el-menu-item>
-          </el-menu-item-group>
+<!--          <el-menu-item-group>-->
+            <el-menu-item v-for="child in item.children"  :key="child.index" :index="child.path">
+             {{ child.title}}-{{child.path }}
+            </el-menu-item>
+<!--          </el-menu-item-group>-->
         </el-sub-menu>
         <el-menu-item v-else :index="item.index">
           <el-icon v-if="item.icon"><component :is="item.icon" /></el-icon>

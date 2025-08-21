@@ -30,10 +30,13 @@ export type StorageType = "localStorage" | "vueuse" | "indexedDB";
 export function createStorage(type: StorageType, options: StorageOptions = defaultOptions): StorageAdapter {
 	switch (type) {
 		case "localStorage":
+			console.log("storage type: LocalStorage");
 			return new LocalStorageAdapter(options);
 		case "vueuse":
+			console.log("storage type: VueUseStorage");
 			return new VueUseStorageAdapter(options);
 		case "indexedDB":
+			console.log("storage type: IndexedDB");
 			return new IndexedDBAdapter(options);
 		default:
 			throw new Error(`Unsupported storage type: ${type}`);

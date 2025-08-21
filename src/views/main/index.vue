@@ -39,7 +39,8 @@ watch(changeFold, (newVal) => {
           <NavHeader :mode="FOLD_MODE.PROPS"/>
         </el-header>
         <el-main>
-          <PageContent />
+          <!-- <PageContent /> -->
+           <RouterView />
         </el-main>
       </el-container>
     </el-container>

@@ -54,10 +54,10 @@ export function useFold<T, E extends boolean | undefined>(
 		mode === FOLD_MODE.PROPS && emit !== undefined && modelValue !== undefined;
 
 	if (isValidPropsMode) {
-		logger.success("⚡[PROPS MODE]⚡")
+		logger.success(`${useFold.name}:⚡[PROPS MODE]⚡`)
 		return createPropsFoldManager(modelValue, emit);
 	}
-	logger.success("⚡[PINIA MODE]⚡")
+	logger.success(`${useFold.name}:⚡[PINIA MODE]⚡`)
 	// 不满足 Props 模式条件时，降级使用 Pinia 模式
 	return createPiniaFoldManager();
 }

@@ -18,5 +18,6 @@ export interface ParsedMenuItem<T> {
   icon?: any;
   children?: ParsedMenuItem<T>[];
   sort: number;
+  path: string | null;
 }
 

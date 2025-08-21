@@ -7,8 +7,8 @@ import router from "@/router"
 
 import {showErrors} from '@/utils'
 
-
 import { v4 as uuidv4 } from 'uuid';
+import { ElMessage } from 'element-plus';
 
 
 // 提取 Promise 中的实际类型
@@ -65,18 +65,20 @@ export const useUserStore = defineStore('user-login',()=>{
 
             state.value.token = res.data.tkToken;
             state.value.userID = res.data.id;
+            //存储登录数据
             LSInstance.set("loginData",res.data)
+            console.log("登录数据",await LSInstance.get("loginData"))
 
-            console.log(await LSInstance.get("loginData"))
-
-
+            //获取用户信息
             const userinfo = await getUserInfo(state.value.userID);
-            console.log("userinfo",userinfo);
+            console.log("userinfo", userinfo);
+            
+
+
             if(userinfo?.success) {
                 router.push("/main");
                 return userinfo;
             }
-            const str = `登录失败：${userinfo?.msg}---${userinfo?.errors??""}`
 
             ElMessage.error(showErrors(userinfo));
 
@@ -91,7 +93,7 @@ export const useUserStore = defineStore('user-login',()=>{
         state.value.loading = true;
         state.value.error = null;
         try {
-            console.log("getUserInfo",id);
+            console.log("获取用户信息",id);
             const userinfo = await userApi.getUserInfo(id);
             state.value.userInfo = userinfo.data;
             return userinfo;
@@ -108,11 +110,11 @@ export const useUserStore = defineStore('user-login',()=>{
         return res;
        //console.log("getCaptcha",res)
     }
-    getCaptcha({uuid:uuidv4()})
+   // getCaptcha({uuid:uuidv4()})
 
-const setCaptchaInfo = (captchaInfo: ICaptchaType) => {
-    state.value.captchaInfo = captchaInfo;
-}
+    const setCaptchaInfo = (captchaInfo: ICaptchaType) => {
+        state.value.captchaInfo = captchaInfo;
+    }
     const logout = () => {
         router.push("/login");
         LSInstance.clear();
@@ -130,7 +132,8 @@ const setCaptchaInfo = (captchaInfo: ICaptchaType) => {
         setCaptchaInfo,
         getCaptcha,
         isAuthenticated,
-        initState
+        initState,
+    
     }
 
 
